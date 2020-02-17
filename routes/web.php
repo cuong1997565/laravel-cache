@@ -26,3 +26,5 @@ Route::get('users/{id}', function ($id) {
 Route::get('radis', 'RadisController@Radis');
 
 Route::get('/article/{id}', 'RadisController@showArticle')->where('id','[0-9]+');
+
+Route::get('posts','BlogController@showBlog');
