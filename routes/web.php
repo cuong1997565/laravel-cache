@@ -23,8 +23,13 @@ Route::get('users/{id}', function ($id) {
 });
 
 
-Route::get('radis', 'RadisController@Radis');
+// Route::get('radis', 'RadisController@Radis');
 
-Route::get('/article/{id}', 'RadisController@showArticle')->where('id','[0-9]+');
+// Route::get('/article/{id}', 'RadisController@showArticle')->where('id','[0-9]+');
 
-Route::get('posts','BlogController@showBlog');
+Route::get('article','BlogController@showBlog');
+Route::get('article/{id}','BlogController@showArticle');
+Route::get('filter/{name}','BlogController@showFilteredArticles');
+
+Route::get('admin/addarticle','AdminController@showAddPost');
+Route::post('admin/addarticle','AdminController@doAddPost');

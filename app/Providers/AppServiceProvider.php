@@ -23,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+
+        $this->app->bind(
+			'App\Services\PostRegistrar'
+		);
+
 		$this->app->bind('App\Contracts\PostContract', 'App\BlogPost');
 
 

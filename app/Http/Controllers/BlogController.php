@@ -36,13 +36,51 @@ class BlogController extends Controller {
 	public function showBlog()
 	{
 
-        DB::connection()->enableQueryLog();
+        // DB::connection()->enableQueryLog();
         $posts = $this->post->fetchAll();
-        $log = DB::getQueryLog();
-       print_r($log);
+        // $log = DB::getQueryLog();
+        $tags = Redis::sRandMember('article:tags', 4);
+		return view('home')->with([ 'posts' => $posts , 'tags' => $tags]);
+    }
 
-		// return view('posts')->with([ 'posts' => $posts ]);
-	}
+    public function showArticle($id) {
+        $article = $this->post->fetch($id);
+        if($article) {
+            // Increment article views
+			$views = Redis::pipeline(function ($pipe) use ($id)
+			{
+				$pipe->zIncrBy('articleViews', 1, 'article:' . $id);
+				$pipe->incr('article:' . $id . ':views');
+			});
+
+			// Get number of views from resulting array of Redis::pipeline
+			$views = $views['1'];
+
+            $tags = Redis::sMembers('article:' . $id . ':tags');
+
+			return view('blog.article')->with([ 'article' => $article, 'views' => $views, 'tags' => $tags ]);
+        }
+
+        return view('errors.404');
+    }
+
+    public function showFilteredArticles($name) {
+            // Array of post IDs matching the tag filter
+            $postIDs = Redis::zRange('article:tag:' . $name, 0, -1);
+
+            // Fetch posts
+            $posts = $this->post->filterFetch($postIDs);
+
+
+            // Return more random tags
+            // We can ensure we don't repeat the same tag by fetching +1 tag
+            // and checking if it matches $tag
+            $tags = Redis::sRandMember('article:tags', 4);
+
+            return view('home')->with([ 'posts' => $posts, 'tags' => $tags ]);
+
+
+    }
 
 
 }

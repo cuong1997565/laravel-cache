@@ -14,5 +14,7 @@ interface PostContract {
 	 * @param  int $id post ID
 	 * @return Object
 	 */
-	public function fetch($id);
+    public function fetch($id);
+
+    public function filterFetch($name);
 }
