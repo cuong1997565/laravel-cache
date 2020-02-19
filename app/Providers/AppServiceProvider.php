@@ -25,10 +25,14 @@ class AppServiceProvider extends ServiceProvider
     {
 
         $this->app->bind(
-			'App\Services\PostRegistrar'
+            'App\Services\PostRegistrar',
+            'App\Services\UpdateRegistrar'
 		);
 
 		$this->app->bind('App\Contracts\PostContract', 'App\BlogPost');
+        $this->app->bind('App\Contracts\UpdateContract', 'App\Update');
+        $this->app->bind('App\Contracts\FeedUserContract', 'App\FeedUser');
+
 
 
     }

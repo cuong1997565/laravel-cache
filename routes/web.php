@@ -33,3 +33,14 @@ Route::get('filter/{name}','BlogController@showFilteredArticles');
 
 Route::get('admin/addarticle','AdminController@showAddPost');
 Route::post('admin/addarticle','AdminController@doAddPost');
+
+Route::get('/{id}/feed', 'UserController@showFeed')->where('id', '[0-9]+');
+
+
+Route::get('/{id}/postupdate', 'UserController@showAddUpdate')->where('id', '[0-9]+');
+
+Route::post('/{id}/postupdate', 'UserController@doAddUpdate')->where('id', '[0-9]+');
+
+
+Route::get('/{id}/userlist', 'UserController@showUserList')->where('id', '[0-9]+');
+
